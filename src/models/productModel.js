@@ -77,7 +77,31 @@ productSchema.pre(/^find/, function (next) {
     path: 'category',
     select: 'name -_id',
   });
-  next()
+  next();
 });
+
+const setImageURL = (doc)=>{
+  if(doc.imageCover){
+    const imageCoverURL =`${process.env.BASE_URL}/products/${doc.imageCover}`
+    doc.imageCover = imageCoverURL
+  }
+  if(doc.images){
+    const imagesURL = []
+    doc.images.forEach((image)=>{
+      const imageURL =`${process.env.BASE_URL}/products/${image}`
+      imagesURL.push(imageURL)
+    })
+    doc.images = imagesURL
+  }
+}
+//running with get & getAll & Update convert image name to url but in db save name image 
+productSchema.post('init',(doc)=>{
+  setImageURL(doc)
+})
+
+//running with create convert image name to url but in db save name image 
+productSchema.post('save',(doc)=>{
+ setImageURL(doc)
+})
 
 module.exports = mongoose.model('Product', productSchema);

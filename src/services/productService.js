@@ -1,5 +1,58 @@
+const sharp = require('sharp');
+const multer = require('multer');
+const asyncHandler = require('express-async-handler');
+
 const Product = require('../models/productModel');
 const factory = require('./handlerFactory');
+const ApiError = require('../utils/apiError');
+//1
+const memoryStorage = multer.memoryStorage();
+//2
+const filterImage = function (req, file, cb) {
+  if (file.mimetype.startsWith('image')) {
+    cb(null, true);
+  } else {
+    cb(new ApiError(`Only image Allowed`, 400), false);
+  }
+};
+//3
+const uploads = multer({ storage: memoryStorage, fileFilter: filterImage });
+//4
+exports.uploadImages = uploads.fields([
+  { name: 'imageCover', maxCount: 1 },
+  { name: 'images', maxCount: 5 },
+]);
+//5
+exports.resizeImages = asyncHandler(async (req, res, next) => {
+  if (req.files.imageCover) {
+    const imageCoverFilename = `product-${Date.now()}- ${Math.round(Math.random() * 1e9)}-cover.jpeg`;
+    await sharp(req.files.imageCover[0].buffer)
+      .resize(2000, 600) //resize image
+      .toFormat('jpeg') // ext image
+      .jpeg({ quality: 95 }) // image quality
+      .toFile(`uploads/products/${imageCoverFilename}`); // where image save}
+    req.body.imageCover = imageCoverFilename;
+  }
+
+  if (req.files.images) {
+    req.body.images = [];
+
+    await Promise.all(
+
+      req.files.images.map(async (image) => {
+        const imagesName = `product-${Date.now()}- ${Math.round(Math.random() * 1e9)}-image.jpeg`;
+
+        await sharp(image.buffer)
+          .resize(2000, 600) //resize image
+          .toFormat('jpeg') // ext image
+          .jpeg({ quality: 95 }) // image quality
+          .toFile(`uploads/products/${imagesName}`); // where image save}
+        req.body.images.push(imagesName);
+      })
+    );
+  }
+  next()
+});
 
 //@desc return list of products
 //@route GET /api/v1/products

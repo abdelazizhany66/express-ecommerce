@@ -1,3 +1,5 @@
+const path = require('path')
+
 const express = require('express');
 const dotenv = require('dotenv');
 
@@ -18,6 +20,8 @@ const app = express();
 
 //middlewares
 app.use(express.json());
+//serve folder 
+app.use(express.static((path.join(__dirname,'uploads'))))
 
 //routes
 app.use('/api/v1/categories', categoryRoute);
