@@ -13,6 +13,7 @@ const subCategoryRoute = require('./src/routes/subCategoryRoute');
 const brandRoute = require('./src/routes/brandRoute');
 const productRoute = require('./src/routes/productRoute');
 const userRoute = require('./src/routes/userRoute ');
+const authRoute = require('./src/routes/authRoute');
 
 //connect DB
 connectDB();
@@ -30,6 +31,7 @@ app.use('/api/v1/subcategories', subCategoryRoute);
 app.use('/api/v1/brands', brandRoute);
 app.use('/api/v1/products', productRoute);
 app.use('/api/v1/users', userRoute);
+app.use('/api/v1/auth', authRoute);
 
 // if client send req to other route not exist
 app.use((req, res, next) => {
