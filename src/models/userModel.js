@@ -21,9 +21,9 @@ const userSchema = new mongoose.Schema(
 
     phone: String,
     passwordChangedAt: Date,
-    resetPasswordCode:String,
-    resetPasswordExpires:Date,
-    resetPasswordVerified:Boolean,
+    resetPasswordCode: String,
+    resetPasswordExpires: Date,
+    resetPasswordVerified: Boolean,
 
     password: {
       type: String,
@@ -35,10 +35,28 @@ const userSchema = new mongoose.Schema(
       enum: ['user', 'admin', 'manager'],
       default: 'user',
     },
-    active:{
-      type:Boolean,
-      default:true
-    }
+    active: {
+      type: Boolean,
+      default: true,
+    },
+   //chield refrence
+    wishlist: [
+      {
+        type: mongoose.Schema.ObjectId,
+        ref: "Product",
+      },
+    ],
+    //embedded 
+    addresses: [
+      {
+        id: { type: mongoose.Schema.Types.ObjectId },
+        alias: String,
+        address: String,
+        city: String,
+        postalCode: String,
+        phone: String,
+      },
+    ],
   },
 
   { timestamps: true }

@@ -15,6 +15,8 @@ const productRoute = require('./src/routes/productRoute');
 const userRoute = require('./src/routes/userRoute ');
 const authRoute = require('./src/routes/authRoute');
 const reviewRoute = require('./src/routes/reviewRoute');
+const wishlistRoute = require('./src/routes/wishlistRoute');
+const addressRoute = require('./src/routes/addressRoute');
 
 //connect DB
 connectDB();
@@ -34,6 +36,8 @@ app.use('/api/v1/products', productRoute);
 app.use('/api/v1/users', userRoute);
 app.use('/api/v1/auth', authRoute);
 app.use('/api/v1/reviews', reviewRoute);
+app.use('/api/v1/wishlists', wishlistRoute);
+app.use('/api/v1/addresses', addressRoute);
 
 // if client send req to other route not exist
 app.use((req, res, next) => {
