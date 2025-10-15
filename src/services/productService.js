@@ -38,7 +38,6 @@ exports.resizeImages = asyncHandler(async (req, res, next) => {
     req.body.images = [];
 
     await Promise.all(
-
       req.files.images.map(async (image) => {
         const imagesName = `product-${Date.now()}- ${Math.round(Math.random() * 1e9)}-image.jpeg`;
 
@@ -51,7 +50,7 @@ exports.resizeImages = asyncHandler(async (req, res, next) => {
       })
     );
   }
-  next()
+  next();
 });
 
 //@desc return list of products
@@ -88,7 +87,7 @@ exports.createProduct = factory.createDocument(Product);
 //@desc Get specific product
 //@route GET /api/v1/products
 //@access public
-exports.getProduct = factory.getOneDocument(Product);
+exports.getProduct = factory.getOneDocument(Product, 'reviews');
 // exports.getProduct = asyncHandler(async (req, res, next) => {
 //   const { id } = req.params;
 //   const product = await Product.findById(id);

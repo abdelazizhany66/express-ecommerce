@@ -4,11 +4,12 @@ const ApiFeature = require('../utils/apiFeature');
 
 exports.deleteDocument = (Model) =>
   asyncHandler(async (req, res, next) => {
-    const { id } = req.params;
-    const document = await Model.findByIdAndDelete({ _id: id });
+    const document = await Model.findByIdAndDelete(req.params.id);
     if (!document) {
-      next(new ApiError(`No document for this id:${id}`));
+      return next(new ApiError(`No document for this id:${req.params.id}`));
     }
+
+    await document.deleteOne();
     res.status(200).json({ data: `it's document ${document.id} is Deleted` });
   });
 
@@ -20,6 +21,7 @@ exports.updateDocument = (Module) =>
     if (!document) {
       next(new ApiError(`No document for this id:${req.params.id}`));
     }
+    document.save();
     res.status(200).json({ data: document });
   });
 
@@ -29,13 +31,17 @@ exports.createDocument = (Model) =>
     res.status(200).json({ date: newDoc });
   });
 
-exports.getOneDocument = (Model) =>
+exports.getOneDocument = (Model, populateOptions) =>
   asyncHandler(async (req, res, next) => {
-    const subCategory = await Model.findById(req.params.id);
-    if (!subCategory) {
+    let query = Model.findById(req.params.id);
+    if (populateOptions) {
+      query = query.populate(populateOptions);
+    }
+    const document = await query;
+    if (!document) {
       next(new ApiError(`no category for this id:${req.params.id}`, 404));
     }
-    res.status(200).json({ date: subCategory });
+    res.status(200).json({ date: document });
   });
 
 exports.getAllDocs = (Model, modelName = '') =>

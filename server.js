@@ -1,4 +1,4 @@
-const path = require('path')
+const path = require('path');
 
 const express = require('express');
 const dotenv = require('dotenv');
@@ -14,6 +14,7 @@ const brandRoute = require('./src/routes/brandRoute');
 const productRoute = require('./src/routes/productRoute');
 const userRoute = require('./src/routes/userRoute ');
 const authRoute = require('./src/routes/authRoute');
+const reviewRoute = require('./src/routes/reviewRoute');
 
 //connect DB
 connectDB();
@@ -22,8 +23,8 @@ const app = express();
 
 //middlewares
 app.use(express.json());
-//serve folder 
-app.use(express.static((path.join(__dirname,'uploads'))))
+//serve folder
+app.use(express.static(path.join(__dirname, 'uploads')));
 
 //routes
 app.use('/api/v1/categories', categoryRoute);
@@ -32,6 +33,7 @@ app.use('/api/v1/brands', brandRoute);
 app.use('/api/v1/products', productRoute);
 app.use('/api/v1/users', userRoute);
 app.use('/api/v1/auth', authRoute);
+app.use('/api/v1/reviews', reviewRoute);
 
 // if client send req to other route not exist
 app.use((req, res, next) => {

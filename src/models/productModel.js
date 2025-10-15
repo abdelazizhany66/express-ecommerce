@@ -68,6 +68,8 @@ const productSchema = new mongoose.Schema(
   },
   {
     timestamps: true,
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true },
   }
 );
 
@@ -80,28 +82,35 @@ productSchema.pre(/^find/, function (next) {
   next();
 });
 
-const setImageURL = (doc)=>{
-  if(doc.imageCover){
-    const imageCoverURL =`${process.env.BASE_URL}/products/${doc.imageCover}`
-    doc.imageCover = imageCoverURL
+const setImageURL = (doc) => {
+  if (doc.imageCover) {
+    const imageCoverURL = `${process.env.BASE_URL}/products/${doc.imageCover}`;
+    doc.imageCover = imageCoverURL;
   }
-  if(doc.images){
-    const imagesURL = []
-    doc.images.forEach((image)=>{
-      const imageURL =`${process.env.BASE_URL}/products/${image}`
-      imagesURL.push(imageURL)
-    })
-    doc.images = imagesURL
+  if (doc.images) {
+    const imagesURL = [];
+    doc.images.forEach((image) => {
+      const imageURL = `${process.env.BASE_URL}/products/${image}`;
+      imagesURL.push(imageURL);
+    });
+    doc.images = imagesURL;
   }
-}
-//running with get & getAll & Update convert image name to url but in db save name image 
-productSchema.post('init',(doc)=>{
-  setImageURL(doc)
-})
+};
+//running with get & getAll & Update convert image name to url but in db save name image
+productSchema.post('init', (doc) => {
+  setImageURL(doc);
+});
 
-//running with create convert image name to url but in db save name image 
-productSchema.post('save',(doc)=>{
- setImageURL(doc)
-})
+//running with create convert image name to url but in db save name image
+productSchema.post('save', (doc) => {
+  setImageURL(doc);
+});
+
+//show filed in product all review in specific product form child
+productSchema.virtual('reviews', {
+  ref: 'Review',
+  foreignField: 'product',
+  localField: '_id',
+});
 
 module.exports = mongoose.model('Product', productSchema);
