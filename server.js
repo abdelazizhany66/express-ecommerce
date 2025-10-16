@@ -8,15 +8,7 @@ const APIError = require('./src/utils/apiError');
 const connectDB = require('./src/config/connect-db');
 const globalError = require('./src/middleware/error-middleware');
 //routes
-const categoryRoute = require('./src/routes/categoryRoute');
-const subCategoryRoute = require('./src/routes/subCategoryRoute');
-const brandRoute = require('./src/routes/brandRoute');
-const productRoute = require('./src/routes/productRoute');
-const userRoute = require('./src/routes/userRoute ');
-const authRoute = require('./src/routes/authRoute');
-const reviewRoute = require('./src/routes/reviewRoute');
-const wishlistRoute = require('./src/routes/wishlistRoute');
-const addressRoute = require('./src/routes/addressRoute');
+const mountRoute = require('./src/routes');
 
 //connect DB
 connectDB();
@@ -29,15 +21,7 @@ app.use(express.json());
 app.use(express.static(path.join(__dirname, 'uploads')));
 
 //routes
-app.use('/api/v1/categories', categoryRoute);
-app.use('/api/v1/subcategories', subCategoryRoute);
-app.use('/api/v1/brands', brandRoute);
-app.use('/api/v1/products', productRoute);
-app.use('/api/v1/users', userRoute);
-app.use('/api/v1/auth', authRoute);
-app.use('/api/v1/reviews', reviewRoute);
-app.use('/api/v1/wishlists', wishlistRoute);
-app.use('/api/v1/addresses', addressRoute);
+mountRoute(app);
 
 // if client send req to other route not exist
 app.use((req, res, next) => {
