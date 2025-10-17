@@ -33,13 +33,14 @@ exports.createDocument = (Model) =>
 
 exports.getOneDocument = (Model, populateOptions) =>
   asyncHandler(async (req, res, next) => {
-    let query = Model.findById(req.params.id);
+    const { id } = req.params;
+    let query = Model.findById(id);
     if (populateOptions) {
       query = query.populate(populateOptions);
     }
     const document = await query;
     if (!document) {
-      next(new ApiError(`no category for this id:${req.params.id}`, 404));
+      next(new ApiError(`no Document for this id:${req.params.id}`, 404));
     }
     res.status(200).json({ date: document });
   });
@@ -65,3 +66,5 @@ exports.getAllDocs = (Model, modelName = '') =>
       .status(200)
       .json({ result: documents.length, paginationResult, data: documents });
   });
+
+  
