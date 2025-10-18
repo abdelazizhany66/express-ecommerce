@@ -2,6 +2,9 @@ const path = require('path');
 
 const express = require('express');
 const dotenv = require('dotenv');
+const cors = require('cors');
+const compression = require('compression');
+const rateLimit = require('express-rate-limit');
 
 dotenv.config({ path: 'config.env' });
 const APIError = require('./src/utils/apiError');
@@ -9,16 +12,30 @@ const connectDB = require('./src/config/connect-db');
 const globalError = require('./src/middleware/error-middleware');
 //routes
 const mountRoute = require('./src/routes');
+const { webhochCheckout } = require('./src/services/orderService');
 
 //connect DB
 connectDB();
 
 const app = express();
 
-//middlewares
-app.use(express.json());
+//enable to other domains access to aplication
+app.use(cors());
+
+// compress responses
+app.use(compression());
+
+app.post(
+  '/webhook-checkout',
+  express.raw({ type: 'application/json' }),
+  webhochCheckout
+);
+
+//middlewares     fixing a request size limit for all requests
+app.use(express.json({ limit: '20kb' }));
 //serve folder
 app.use(express.static(path.join(__dirname, 'uploads')));
+
 
 //routes
 mountRoute(app);

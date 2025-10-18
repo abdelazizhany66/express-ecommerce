@@ -6,12 +6,14 @@ const {
   createUserFilter,
   updateOrderToDelivered,
   updateOrderToPaid,
+  checkOutSession,
 } = require('../services/orderService');
 const { protect, allowedTo } = require('../services/authService');
 
 const router = express.Router();
 
 router.use(protect);
+router.route('/check-out-session').post(allowedTo('user'), checkOutSession);
 
 router
   .route('/')
