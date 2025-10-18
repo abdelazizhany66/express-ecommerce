@@ -5,13 +5,6 @@ It provides all the essential backend services needed to power a modern online s
 
 ---
 
-## Project Overview
-
-The E-Commerce Backend API is designed following **RESTful API principles** to handle every aspect of an online store’s backend.  
-It provides features for managing products, categories, users, and orders while maintaining security, validation, and scalability.
-
-This project can be used as a **foundation for real-world e-commerce systems** or as a **portfolio project** demonstrating backend development skills with Node.js and MongoDB.
-
 ### Main Objectives
 
 - Build a **modular and maintainable** backend architecture for e-commerce platforms.
@@ -45,10 +38,10 @@ This project can be used as a **foundation for real-world e-commerce systems** o
 
 ### 1 Project Overview
 
-This section introduces the full **E-Commerce backend project** that will be implemented during the course.  
-You’ll understand the **features**, **modules**, and **objectives** of the system before starting development.
+The E-Commerce Backend API is designed following **RESTful API principles** to handle every aspect of an online store’s backend.  
+It provides features for managing products, categories, users, and orders while maintaining security, validation, and scalability.
 
-**Keywords:** project structure, overview, backend roadmap, feature planning
+This project can be used as a **foundation for real-world e-commerce systems** or as a **portfolio project** demonstrating backend development skills with Node.js and MongoDB.
 
 ---
 
