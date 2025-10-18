@@ -7,6 +7,7 @@ const bcrypt = require('bcryptjs');
 const User = require('../models/userModel');
 const ApiError = require('../utils/apiError');
 const sendEmail = require('../utils/sendEmail');
+const { sanitizeUser } = require('../utils/sanitize-data');
 
 const accessToken = (payload) =>
   jwt.sign({ userId: payload }, process.env.JWT_SECRET, {
@@ -24,7 +25,7 @@ exports.signUp = asyncHandler(async (req, res) => {
   });
 
   const token = accessToken(newUser.id);
-  res.status(201).json({ data: newUser, accessToken: token });
+  res.status(201).json({ data: sanitizeUser(newUser), accessToken: token });
 });
 
 //@desc login user

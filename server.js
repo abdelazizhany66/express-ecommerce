@@ -5,6 +5,9 @@ const dotenv = require('dotenv');
 const cors = require('cors');
 const compression = require('compression');
 const rateLimit = require('express-rate-limit');
+const hpp = require('hpp');
+const mongoSanitize = require('express-mongo-sanitize');
+
 
 dotenv.config({ path: 'config.env' });
 const APIError = require('./src/utils/apiError');
@@ -24,6 +27,8 @@ app.use(cors());
 
 // compress responses
 app.use(compression());
+app.use(mongoSanitize());
+
 
 app.post(
   '/webhook-checkout',
@@ -36,6 +41,20 @@ app.use(express.json({ limit: '20kb' }));
 //serve folder
 app.use(express.static(path.join(__dirname, 'uploads')));
 
+// Limit each IP to 100 requests per `window` (here, per 15 minutes).
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  limit: 100,
+});
+
+// Apply the rate limiting middleware to all requests.
+app.use('/api', limiter);
+
+app.use(
+  hpp({
+    whitelist: ['price', 'sold', 'ratingQuantity', 'quantity', 'ratingAvarage'],
+  })
+);
 
 //routes
 mountRoute(app);
